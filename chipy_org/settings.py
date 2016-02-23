@@ -122,7 +122,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(PROJECT_ROOT, "templates")],
-        'APP_DIRS': True,
+        'APP_DIRS': False,
         'OPTIONS': {
             'debug': DEBUG,
             'context_processors': [
@@ -135,6 +135,11 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "social_auth.context_processors.social_auth_login_redirect",
             ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                'admin_tools.template_loaders.Loader',
+            ]
         },
     },
 ]
