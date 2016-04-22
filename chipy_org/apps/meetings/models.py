@@ -5,10 +5,10 @@ import random
 
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-from django.contrib.auth.models import User
 
 from interval.fields import IntervalField
 
+from django.conf import settings
 from chipy_org.libs.models import CommonModel
 
 MAX_LENGTH = 255
@@ -84,7 +84,7 @@ class Presentor(CommonModel):
     def __unicode__(self):
         return "%s | (%s)" % (self.name, self.email)
 
-    user = models.ForeignKey(User, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
     name = models.CharField(max_length=MAX_LENGTH)
     email = models.EmailField(max_length=MAX_LENGTH, blank=True, null=True)
     phone = models.CharField(max_length=MAX_LENGTH, blank=True, null=True)
@@ -129,7 +129,7 @@ class RSVP(CommonModel):
         ('M', "Maybe"),
     )
 
-    user = models.ForeignKey(User, blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
     name = models.CharField(max_length=MAX_LENGTH, blank=True, null=True)
     email = models.EmailField(max_length=255, blank=True, null=True)
     meeting = models.ForeignKey(Meeting)

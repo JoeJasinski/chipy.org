@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.views.generic import ListView
 from django.views.generic import UpdateView
+User = get_user_model()
 
 from .models import UserProfile
 from .forms import ProfileForm
