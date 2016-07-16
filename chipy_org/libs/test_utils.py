@@ -1,9 +1,9 @@
-from django.utils import unittest
 import django
 from django.test.client import Client
-from django.core.urlresolvers import reverse
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class AuthenticatedTest(django.test.TestCase):

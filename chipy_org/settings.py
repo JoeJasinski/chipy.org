@@ -124,7 +124,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(PROJECT_ROOT, "templates")],
-        'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,
             'context_processors': [
@@ -135,7 +134,13 @@ TEMPLATES = [
                 "django.core.context_processors.request",
                 "django.core.context_processors.static",
                 "django.contrib.messages.context_processors.messages",
-                "social_auth.context_processors.social_auth_login_redirect",
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                'admin_tools.template_loaders.Loader',
             ],
         },
     },
@@ -150,19 +155,15 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'chipy_org.libs.middleware.ChipySocialAuthExceptionMiddleware',  # social auth settings
+    #'chipy_org.libs.middleware.ChipySocialAuthExceptionMiddleware',  # social auth settings
 )
 
 LOGIN_ERROR_URL = '/'
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.twitter.TwitterBackend',
-    'social_auth.backends.facebook.FacebookBackend',
-    'social_auth.backends.google.GoogleOAuth2Backend',
-    'social_auth.backends.browserid.BrowserIDBackend',
-    'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    'social_auth.backends.contrib.github.GithubBackend',
-    'social_auth.backends.OpenIDBackend',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.github.GithubOAuth2',
+    'social.backends.open_id.OpenIdAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -174,13 +175,13 @@ SOCIAL_AUTH_ENABLED_BACKENDS = (
 )
 
 SOCIAL_AUTH_PIPELINE = (
-    'social_auth.backends.pipeline.social.social_auth_user',
+    'social.backends.pipeline.social.social_auth_user',
     'chipy_org.libs.social_auth_pipelines.associate_by_email',
-    'social_auth.backends.pipeline.user.get_username',
-    'social_auth.backends.pipeline.user.create_user',
-    'social_auth.backends.pipeline.social.associate_user',
-    'social_auth.backends.pipeline.social.load_extra_data',
-    'social_auth.backends.pipeline.user.update_user_details'
+    'social.backends.pipeline.user.get_username',
+    'social.backends.pipeline.user.create_user',
+    'social.backends.pipeline.social.associate_user',
+    'social.backends.pipeline.social.load_extra_data',
+    'social.backends.pipeline.user.update_user_details'
 )
 
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email', 'first_name', 'last_name']
@@ -217,7 +218,7 @@ INSTALLED_APPS = [
     'honeypot',
     'interval',
     'rest_framework',
-    'social_auth',
+    'social.apps.django_app.default',
     'storages',
     'tinymce',
     "sorl.thumbnail",
