@@ -1,4 +1,5 @@
 from django.views.generic import ListView, FormView
+from django.contrib import messages
 from django.views.generic.list import MultipleObjectMixin
 from django.core.urlresolvers import reverse_lazy
 from . import models
@@ -14,15 +15,17 @@ class TalkRequestList(MultipleObjectMixin, FormView):
     paginate_by = 50
 
     def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        if form.is_valid():
-            return self.form_valid(form)
+        if request.user.is_authenticated():
+            form_class = self.get_form_class()
+            form = self.get_form(form_class)
+            if form.is_valid():
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
         else:
-            return self.form_invalid(form)
+            return self.get(request, *args, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):
-
         self.category = request.GET.get('category')
         self.object_list = self.get_queryset()
         return super(TalkRequestList, self).dispatch(
@@ -40,6 +43,7 @@ class TalkRequestList(MultipleObjectMixin, FormView):
         talk_request = form.save(commit=False)
         talk_request.submitter = self.request.user
         talk_request.save()
+        messages.add_message(self.request, messages.INFO, 'Thank you for your idea.')
         return super(TalkRequestList, self).form_valid(form)
 
 

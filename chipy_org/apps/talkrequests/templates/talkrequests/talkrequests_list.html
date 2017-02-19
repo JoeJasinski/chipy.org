@@ -8,10 +8,16 @@
 <h2>ChiPy Talk Requests</h2>
 <p>{% flatblock "talkrequests_info_text" %}</p>
 
+{% if request.user.is_authenticated %}
 <form method="post" action=".">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" name="submit" value="submit" />
 </form>
+{% else %}
+<p>
+    Please login or register to submit ideas.
+</p>
+{% endif %}
 
 {% for talkrequest in talkrequests %}
 <div class="row">
