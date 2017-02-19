@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^login/{0,1}$', TemplateView.as_view(template_name='login.html')),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^meetings/', include('chipy_org.apps.meetings.urls')),
+    url(r'^talkrequests/', include('chipy_org.apps.talkrequests.urls')),
     url(r'^profiles/', include('chipy_org.apps.profiles.urls', namespace="profiles")),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^about/', include('chipy_org.apps.about.urls')),

@@ -1,0 +1,28 @@
+{% extends "site_base.html" %}
+
+{% load i18n staticfiles thumbnail flatblocks %}
+
+{% block head_title %}{% trans "Sponsor List" %}{% endblock %}
+
+{% block body %}
+<h2>ChiPy Talk Requests</h2>
+<p>{% flatblock "talkrequests_info_text" %}</p>
+
+{% for talkrequest in talkrequests %}
+<div class="row">
+
+    <h4 class="span3">{{ talkrequest.title }}</h4>
+    <p>
+        {{ talkrequest.text }}
+    </p>
+    <p>
+        {{ talkrequest.created }}<br />
+        {{ talkrequest.modified }}<br />
+        {{ talkrequest.category.name }}<br />
+    </p>
+
+</div>
+<hr>
+{% endfor %}
+
+{% endblock body %}

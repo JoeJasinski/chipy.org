@@ -5,6 +5,12 @@ from django.utils.text import Truncator
 from chipy_org.libs.models import CommonModel
 
 
+class TalkRequestQuerySet(models.QuerySet):
+
+    def active(self):
+        return self.filter(active=True)
+
+
 class TalkRequest(CommonModel):
     submitter = models.ForeignKey(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length=64)
@@ -23,6 +29,8 @@ class TalkRequest(CommonModel):
 
     def __unicode__(self):
         return "({}) {}".format(self.id, Truncator(self.text).chars(75))
+
+    objects = TalkRequestQuerySet.as_manager()
 
 
 class TalkVote(CommonModel):
