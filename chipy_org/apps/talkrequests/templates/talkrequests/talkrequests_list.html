@@ -8,6 +8,11 @@
 <h2>ChiPy Talk Requests</h2>
 <p>{% flatblock "talkrequests_info_text" %}</p>
 
+<form method="post" action=".">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="submit" value="submit" />
+</form>
+
 {% for talkrequest in talkrequests %}
 <div class="row">
 
@@ -24,5 +29,22 @@
 </div>
 <hr>
 {% endfor %}
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if talkrequests.has_previous %}
+            <a href="?page={{ talkrequests.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ talkrequests.number }} of {{ talkrequests.paginator.num_pages }}.
+        </span>
+
+        {% if talkrequests.has_next %}
+            <a href="?page={{ talkrequests.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
 
 {% endblock body %}

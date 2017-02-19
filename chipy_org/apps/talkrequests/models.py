@@ -10,6 +10,12 @@ class TalkRequestQuerySet(models.QuerySet):
     def active(self):
         return self.filter(active=True)
 
+EXPERIENCE_LEVELS = (
+    ('novice', 'Novice'),
+    ('intermediate', 'Intermediate'),
+    ('advanced', 'Advanced'),
+)
+
 
 class TalkRequest(CommonModel):
     submitter = models.ForeignKey(settings.AUTH_USER_MODEL)
