@@ -232,6 +232,8 @@ INSTALLED_APPS = [
     'chipy_org.apps.meetings',
     'chipy_org.apps.profiles',
     'chipy_org.apps.sponsors',
+    'chipy_org.apps.talkrequests',
+    #'chipy_org.apps.talkrequests.apps.TalkRequestConfig',
 ]
 
 if DEBUG:
