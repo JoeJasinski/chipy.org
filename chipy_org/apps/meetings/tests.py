@@ -6,7 +6,7 @@ from django.conf import global_settings
 from django.contrib.auth import get_user_model
 
 import chipy_org.libs.test_utils as test_utils
-from .models import RSVP, Meeting, Venue, Topic
+from .models import RSVP, Meeting, Venue, Topic, Topic
 
 User = get_user_model()
 
@@ -84,6 +84,13 @@ class SmokeTest(TestCase):
         # CHECK
         self.assertEqual(response.status_code, 302)
 
+    def test__propose_topic__POST__annon(self):
+        # TEST
+        response = self.client.post(reverse_lazy('propose_topic'))
+
+        # CHECK
+        self.assertEqual(response.status_code, 302)
+
     def test__propose_topic__GET__auth(self):
         # SETUP
         self.client.force_login(self.user)
@@ -93,6 +100,55 @@ class SmokeTest(TestCase):
 
         # CHECK
         self.assertEqual(response.status_code, 200)
+
+    def test__propose_topic__POST__auth__error(self):
+        # SETUP
+        self.client.force_login(self.user)
+
+        # TEST
+        response = self.client.post(reverse_lazy('propose_topic'))
+
+        # CHECK
+        self.assertEqual(response.status_code, 200)
+        self.assertSetEqual(
+            set(response.context['form'].errors.as_data().keys()),
+            set({'email', 'title', 'experience_level',
+                 'name', 'description', 'license'})
+        )
+
+    def test__propose_topic__POST__auth__success(self):
+        # SETUP
+        self.client.force_login(self.user)
+        title = "Example Title"
+        description = "test desc"
+        experience_level = "novice"
+        license = "CC BY"
+        name = "test testerson"
+        email = "test@example.com"
+
+        # TEST
+        response = self.client.post(
+            reverse_lazy('propose_topic'),
+            data={
+                "name": name,
+                "email": email,
+                "title": title,
+                "experience_level": experience_level,
+                "description": description,
+                "license": license, }
+            )
+
+        # CHECK
+        self.assertEqual(response.status_code, 302)
+        t = Topic.objects.last()
+        self.assertEqual(t.title, title)
+        self.assertEqual(Topic.objects.count(), 2)
+        self.assertEqual(t.description, description)
+        self.assertEqual(t.experience_level, experience_level)
+        self.assertEqual(t.license, license)
+        self.assertEqual(t.presentors.count(), 1)
+        self.assertEqual(t.presentors.first().name, name)
+        self.assertEqual(t.presentors.first().email, email)
 
     def test__past_topics__GET(self):
         # TEST
