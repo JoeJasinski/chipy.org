@@ -13,7 +13,7 @@ build:
 run:
 	docker-compose up
 
-run_back:
+up:
 	docker-compose up -d
 
 web: run
